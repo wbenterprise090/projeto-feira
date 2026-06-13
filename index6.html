@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IA Maria - Pesquisa de Satisfação</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root { --azul: #1e3a8a; --escuro: #0f172a; }
+body { font-family: 'Inter', sans-serif; background: var(--escuro); padding: 20px; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+.card { background: white; border-radius: 20px; padding: 35px 25px; max-width: 420px; width: 100%; text-align: center; }
+h1 { color: var(--azul); font-size: 24px; font-weight: 800; margin-bottom: 8px; }
+p { color: #64748b; font-size: 14px; margin-bottom: 25px; }
+label { display: block; color: var(--azul); font-weight: 700; font-size: 13px; margin-bottom: 8px; text-align: left; }
+.estrelas { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; font-size: 32px; }
+.estrela { color: #cbd5e1; cursor: pointer; transition: 0.2s; }
+.estrela.ativa { color: #fbbf24; }
+textarea { width: 100%; padding: 14px; border: 2px solid #e2e8f0; border-radius: 10px; margin-bottom: 15px; font-family: 'Inter'; font-size: 14px; }
+.btn { width: 100%; padding: 16px; background: var(--azul); color: white; border: none; border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer; }
+.btn:hover { opacity: 0.9; }
+.sucesso { display: none; }
+.sucesso i { font-size: 50px; color: #10b981; margin-bottom: 15px; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div id="formFeedback">
+    <h1>Pesquisa de Satisfação</h1>
+    <p>Ajuda a IA Maria a melhorar. Leva 30 segundos</p>
+
+    <label>Que nota dás à análise da IA?</label>
+    <div class="estrelas" id="estrelas">
+      <i class="fas fa-star estrela" data-value="1"></i>
+      <i class="fas fa-star estrela" data-value="2"></i>
+      <i class="fas fa-star estrela" data-value="3"></i>
+      <i class="fas fa-star estrela" data-value="4"></i>
+      <i class="fas fa-star estrela" data-value="5"></i>
+    </div>
+
+    <label>Comentário opcional</label>
+    <textarea id="comentario" placeholder="O resultado fez sentido pra ti?" rows="3"></textarea>
+
+    <button class="btn" onclick="enviar()">Enviar Avaliação</button>
+  </div>
+
+  <div class="sucesso" id="sucesso">
+    <i class="fas fa-check-circle"></i>
+    <h1>Obrigado!</h1>
+    <p>Teu feedback ajuda a melhorar a IA Maria para os próximos alunos 🙏</p>
+    <button class="btn" onclick="window.location.href='index.html'">Voltar ao Início</button>
+  </div>
+</div>
+<script>
+let nota = 0;
+
+document.querySelectorAll('.estrela').forEach(estrela => {
+  estrela.addEventListener('click', () => {
+    nota = parseInt(estrela.dataset.value);
+    document.querySelectorAll('.estrela').forEach((e, i) => {
+      e.classList.toggle('ativa', i < nota);
+    });
+  });
+});
+
+async function enviar() {
+  if (nota === 0) {
+    alert('Seleciona uma nota antes de enviar');
+    return;
+  }
+
+  await fetch('/api/feedback', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      nota: nota,
+      comentario: comentario.value,
+      aluno: JSON.parse(localStorage.getItem('dadosAluno')).nome
+    })
+  });
+
+  document.getElementById('formFeedback').style.display = 'none';
+  document.getElementById('sucesso').style.display = 'block';
+}
+</script>
+</body>
+</html>

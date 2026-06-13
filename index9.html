@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meu Histórico | IA Maria</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root { --azul: #1e3a8a; --azul-claro: #3b82f6; --escuro: #0f172a; }
+body { font-family: 'Inter'; background: var(--escuro); padding: 20px; min-height: 100vh; }
+.card { background: white; border-radius: 15px; padding: 35px 30px; max-width: 750px; margin: 0 auto; box-shadow: 0 10px 40px rgba(0,0,0,0.3); }
+h1 { color: var(--azul); font-size: 26px; font-weight: 800; margin-bottom: 25px; display: flex; align-items: center; gap: 12px; }
+.teste { background: #f8fafc; border-left: 4px solid var(--azul); padding: 20px; margin-bottom: 15px; border-radius: 10px; transition: 0.2s; cursor: pointer; }
+.teste:hover { transform: translateX(5px); box-shadow: 0 4px 12px rgba(30,58,138,0.1); }
+.teste-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px; }
+.teste h3 { color: var(--azul); font-size: 17px; font-weight: 700; }
+.teste .data { font-size: 12px; color: #64748b; background: white; padding: 4px 10px; border-radius: 12px; font-weight: 600; }
+.teste p { font-size: 14px; color: #475569; line-height: 1.6; }
+.badge-compat { display: inline-block; padding: 3px 8px; border-radius: 6px; font-size: 12px; font-weight: 700; margin-left: 8px; }
+.badge-alta { background: #d1fae5; color: #065f46; }
+.badge-media { background: #fef3c7; color: #92400e; }
+.badge-baixa { background: #fee2e2; color: #991b1b; }
+.vazio { text-align: center; padding: 60px 20px; color: #94a3b8; }
+.vazio i { font-size: 48px; margin-bottom: 15px; color: #cbd5e1; }
+.vazio p { font-size: 15px; }
+.btn-voltar { display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; background: var(--azul); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; margin-top: 20px; transition: 0.2s; }
+.btn-voltar:hover { background: var(--azul-claro); transform: translateY(-2px); }
+</style>
+</head>
+<body>
+<div class="card">
+  <h1><i class="fas fa-history"></i> Meu Histórico de Testes</h1>
+  <div id="lista"></div>
+  <a href="index.html" class="btn-voltar"><i class="fas fa-arrow-left"></i> Voltar ao Início</a>
+</div>
+<script>
+const historico = JSON.parse(localStorage.getItem('historicoAluno') || '[]');
+const lista = document.getElementById('lista');
+
+function getBadge(percentual) {
+  if (percentual >= 80) return '<span class="badge-compat badge-alta">Alta</span>';
+  if (percentual >= 60) return '<span class="badge-compat badge-media">Média</span>';
+  return '<span class="badge-compat badge-baixa">Baixa</span>';
+}
+
+if (historico.length === 0) {
+  lista.innerHTML = '<div class="vazio"><i class="fas fa-inbox"></i><p>Ainda não realizaste nenhum teste vocacional</p></div>';
+} else {
+  historico.reverse().forEach(t => {
+    const dataFormatada = new Date(t.data).toLocaleDateString('pt-PT', { 
+      day: '2-digit', 
+      month: 'short', 
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+    
+    lista.innerHTML += `
+      <div class="teste">
+        <div class="teste-top">
+          <h3>${t.topArea || 'Área não definida'} ${getBadge(t.compat || 0)}</h3>
+          <span class="data">${dataFormatada}</span>
+        </div>
+        <p><strong>Compatibilidade:</strong> ${t.compat || 0}%</p>
+        <p>${t.justificativa || 'Análise vocacional realizada com sucesso pela IA Maria.'}</p>
+      </div>
+    `;
+  });
+}
+</script>
+</body>
+</html>

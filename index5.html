@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IA Maria - Trajetória Profissional</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+:root { --azul: #1e3a8a; --azul-claro: #3b82f6; --escuro: #0f172a; --verde: #10b981; --laranja: #f59e0b; }
+body { font-family: 'Inter', sans-serif; background: var(--escuro); padding: 20px; min-height: 100vh; }
+.container { max-width: 700px; margin: 0 auto; }
+.card { background: white; border-radius: 20px; padding: 30px 20px; }
+h1 { color: var(--azul); font-size: 22px; font-weight: 800; text-align: center; margin-bottom: 8px; }
+.sub { color: #64748b; font-size: 13px; text-align: center; margin-bottom: 25px; }
+.top-area { background: linear-gradient(135deg, var(--azul), var(--azul-claro)); color: white; padding: 25px; border-radius: 12px; text-align: center; margin-bottom: 25px; }
+.top-area h2 { font-size: 18px; margin-bottom: 5px; }
+.top-area.compat { font-size: 36px; font-weight: 800; }
+.outras { margin-top: 20px; }
+.area-sec { background: #f8fafc; padding: 15px; border-radius: 10px; margin-bottom: 10px; border-left: 4px solid var(--azul-claro); }
+.btn { width: 100%; padding: 16px; background: var(--azul); color: white; border: none; border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer; margin-top: 25px; }
+.erro { color: #dc2626; text-align: center; padding: 20px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+    <h1>Trajetória Profissional</h1>
+    <p class="sub">Resultado da IA Maria</p>
+    <div id="plano"></div>
+    <button class="btn" onclick="window.location.href='index3.html'">Fazer Teste Novamente</button>
+  </div>
+</div>
+<script>
+const resultado = JSON.parse(localStorage.getItem('resultadoTeste'));
+const dados = JSON.parse(localStorage.getItem('dadosTeste'));
+const container = document.getElementById('plano');
+
+if (resultado) {
+  container.innerHTML = `
+    <div class="top-area">
+      <h2>Tua melhor área</h2>
+      <div class="compat">${resultado.compatibilidade}%</div>
+      <p>${resultado.area}</p>
+      <p style="margin-top:10px;font-size:14px">${resultado.descricao}</p>
+      <p style="margin-top:10px;font-size:13px"><strong>Curso recomendado:</strong> ${resultado.curso}</p>
+    </div>
+    <div class="outras">
+      <h3 style="color:var(--azul);margin-bottom:10px">Outras opções que combinam:</h3>
+      ${resultado.outrasAreas.map(a => `
+        <div class="area-sec">
+          <strong>${a.nome}</strong> - ${a.compat}% compatível<br>
+          <small style="color:#64748b">${a.curso}</small>
+        </div>
+      `).join('')}
+    </div>
+  `;
+} else {
+  container.innerHTML = '<div class="erro">Erro: Faz o teste primeiro em Teste Vocacional</div>';
+}
+</script>
+</body>
+</html>

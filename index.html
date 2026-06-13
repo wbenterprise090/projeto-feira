@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mente Brilhante | Instituto Prof. Maria Osvalda</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root { --azul: #1e3a8a; --azul-claro: #3b82f6; --escuro: #0f172a; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', sans-serif; background: var(--escuro); min-height: 100vh; color: #e2e8f0; }
+.barra { background: #1e293b; height: 65px; display: flex; align-items: center; padding: 0 18px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+.menu-btn { font-size: 22px; background: rgba(59,130,246,0.2); border: none; color: white; padding: 8px 12px; border-radius: 8px; margin-right: 15px; cursor: pointer; }
+.titulo h3 { font-weight: 700; font-size: 15px; color: white; }
+.container { display: flex; height: calc(100vh - 65px - 95px); }
+aside { width: 260px; background: #1e293b; display: none; border-right: 1px solid rgba(255,255,255,0.1); }
+.conteudo { flex: 1; display: flex; justify-content: center; overflow-y: auto; }
+.menu-sidebar { padding: 20px 15px; }
+.menu-header { display: flex; align-items: center; gap: 10px; color: var(--azul-claro); font-weight: 700; margin-bottom: 30px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+.menu-link { display: flex; align-items: center; gap: 12px; padding: 12px; color: #cbd5e1; text-decoration: none; border-radius: 8px; margin-bottom: 6px; }
+.menu-link.ativo { background: var(--azul-claro); color: white; }
+.card-mobile { background: white; padding: 50px 25px; width: 100%; text-align: center; }
+.card-mobile h1 { font-size: 32px; font-weight: 800; color: var(--azul); margin-bottom: 12px; }
+.frase-ia { font-size: 20px; font-weight: 700; color: var(--azul-claro); margin-bottom: 20px; }
+.subheadline { color: #475569; margin-bottom: 35px; }
+.btn { padding: 17px; border-radius: 10px; font-weight: 700; font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; border: none; text-decoration: none; margin: 10px auto; max-width: 340px; }
+.btn-primario { background: var(--azul); color: white; }
+.rodape-junto { background: var(--escuro); color: #cbd5e1; text-align: center; padding: 18px; border-top: 2px solid var(--azul-claro); height: 95px; }
+@media (min-width: 969px) { aside { display: block; }.card-mobile { border-radius: 20px; max-width: 700px; margin: auto; } }
+</style>
+</head>
+<body>
+<div class="barra">
+  <button class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
+  <div class="titulo"><h3>Instituto Prof. Maria Osvalda</h3></div>
+</div>
+<div class="container">
+<aside id="sidebar">
+  <nav class="menu-sidebar">
+    <div class="menu-header"><i class="fas fa-graduation-cap"></i><span>Portal Vocacional</span></div>
+    <ul style="list-style:none">
+      <li><a href="index.html" class="menu-link ativo"><i class="fas fa-home"></i><span>Página Inicial</span></a></li>
+      <li><a href="index2.html" class="menu-link"><i class="fas fa-user-graduate"></i><span>Cadastro Acadêmico</span></a></li>
+      <li><a href="index3.html" class="menu-link"><i class="fas fa-clipboard-list"></i><span>Teste Vocacional</span></a></li>
+      <li><a href="index5.html" class="menu-link"><i class="fas fa-route"></i><span>Resultado</span></a></li>
+    </ul>
+  </nav>
+</aside>
+<main class="conteudo">
+  <div class="card-mobile">
+    <h1>Orienta tua carreira<br>com inteligência artificial</h1>
+    <div class="frase-ia">Descobre quem tu és de verdade com a IA Maria</div>
+    <p class="subheadline">Teste vocacional científico desenvolvido por alunos.</p>
+    <a href="index2.html" class="btn btn-primario"><i class="fas fa-rocket"></i> Começar Agora</a>
+  </div>
+</main>
+</div>
+<div class="rodape-junto">
+  <div>Patrocinador: <strong>Instituto Prof. Maria Osvalda</strong></div>
+</div>
+<script>
+function toggleMenu() {
+  const s = document.getElementById('sidebar');
+  if(window.innerWidth < 969) {
+    s.style.display = s.style.display === 'block'? 'none' : 'block';
+    s.style.position = 'fixed'; s.style.top = '65px'; s.style.left = '0'; s.style.height = 'calc(100vh - 65px)'; s.style.zIndex = '99';
+  }
+}
+</script>
+</body>
+</html>

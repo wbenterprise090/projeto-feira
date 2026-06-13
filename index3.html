@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teste Vocacional | IA Maria</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root { --azul: #1e3a8a; --azul-claro: #3b82f6; --escuro: #0f172a; --bg: #0f172a; --card: #ffffff; --text: #1e293b; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', sans-serif; background: var(--bg); padding: 20px; min-height: 100vh; color: var(--text); }
+.container { max-width: 650px; margin: 0 auto; }
+.card { background: var(--card); border-radius: 20px; padding: 35px 25px; margin-bottom: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.4); }
+h1 { color: var(--azul); font-size: 26px; font-weight: 800; margin-bottom: 8px; }
+.sub { color: #64748b; font-size: 14px; margin-bottom: 25px; }
+.pergunta { margin-bottom: 30px; }
+.pergunta h3 { color: var(--azul); font-size: 17px; font-weight: 700; margin-bottom: 15px; }
+.opcoes { display: flex; flex-direction: column; gap: 10px; }
+.opcao { padding: 14px 16px; background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 10px; cursor: pointer; transition: 0.2s; font-size: 14px; }
+.opcao:hover { border-color: var(--azul-claro); background: #eff6ff; }
+.opcao.selecionada { border-color: var(--azul); background: #dbeafe; font-weight: 600; }
+.btn { width: 100%; padding: 18px; background: var(--azul); color: white; border: none; border-radius: 12px; font-weight: 700; font-size: 16px; cursor: pointer; margin-top: 20px; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.loading { text-align: center; margin-top: 20px; display: none; color: var(--azul); font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+    <h1>Teste Vocacional IA Maria</h1>
+    <p class="sub">15 perguntas pra descobrir tua área ideal. 3 minutos</p>
+    <div id="perguntas"></div>
+    <button class="btn" id="btnAnalisar" onclick="analisar()" disabled>Analisar com IA →</button>
+    <div class="loading" id="loading">🤖 IA Maria tá calculando teu perfil...</div>
+  </div>
+</div>
+<script>
+const perguntas = [
+  {p: "Quando enfrentas um problema novo, tu primeiro:", ops: ["Quebro em partes e analiso os dados", "Penso em soluções criativas/fora da caixa", "Pergunto pra quem já resolveu isso", "Testo na prática até funcionar"]},
+  {p: "Numa aula, o que te prende mais atenção:", ops: ["Fórmulas, gráficos e lógica", "Histórias, debates e discussões", "Trabalho de grupo e apresentações", "Laboratório e fazer com as mãos"]},
+  {p: "Se pudesses aprender qualquer skill em 1 mês:", ops: ["Programação ou análise de dados", "Marketing, vendas ou oratória", "Design, fotografia ou edição", "Mecânica, eletricidade ou carpintaria"]},
+  {p: "Teu tipo de trabalho ideal:", ops: ["Resolvendo problemas sozinho no PC", "Liderando e negociando com pessoas", "Criando algo novo do zero", "Construindo/reparando coisas físicas"]},
+  {p: "Quando tens que decidir algo importante:", ops: ["Vejo prós/contras e dados", "Sigo minha intuição/criatividade", "Peço opinião da família/amigos", "Testo primeiro em pequena escala"]},
+  {p: "Matemática e lógica pra ti:", ops: ["É fácil, gosto de desafios", "Suporto quando é necessário", "Prefiro evitar mas me viro", "Detesto, prefiro outras áreas"]},
+  {p: "Num grupo de trabalho tu és:", ops: ["O organizador que faz o plano", "O comunicador que motiva todos", "O criativo que dá as ideias", "O executor que faz acontecer"]},
+  {p: "O que mais te frustra no trabalho:", ops: ["Sistemas lentos e bugs", "Conflitos entre pessoas", "Falta de liberdade criativa", "Trabalho repetitivo sem fim"]},
+  {p: "Se ganhasses 5 milhões KZ, investirias em:", ops: ["PC top + cursos de tech", "Negócio próprio e marketing", "Equipamentos de estúdio/arte", "Ferramentas e oficina própria"]},
+  {p: "Aprendes melhor quando:", ops: ["Leio, pesquiso e pratico sozinho", "Tenho professor explicando passo a passo", "Faço projeto em equipa", "Vejo tutorial e copio fazendo"]},
+  {p: "Em 10 anos te vês:", ops: ["Engenheiro/dev em empresa top", "Dono de negócio/empreendedor", "Artista/designer reconhecido", "Técnico especialista muito requisitado"]},
+  {p: "O que te motiva a acordar cedo:", ops: ["Resolver um problema de código", "Fechar negócio/vender ideia", "Criar algo bonito/impactante", "Construir/consertar algo real"]},
+  {p: "Numa festa tu:", ops: ["Ficas no canto analisando tudo", "Conheces gente nova e conversas", "Criam jogos/animação pro grupo", "Ajudas a montar/coisas práticas"]},
+  {p: "Quando dá erro no PC/carro:", ops: ["Abro e tento entender a lógica", "Procuro tutorial no YouTube", "Ligo pra alguém que percebe", "Mexo até descobrir onde tá o problema"]},
+  {p: "Tua maior força é:", ops: ["Raciocínio lógico e foco", "Comunicação e influência", "Criatividade e visão", "Resiliência e trabalho manual"]}
+];
+
+let respostas = [];
+const container = document.getElementById('perguntas');
+const btn = document.getElementById('btnAnalisar');
+const loading = document.getElementById('loading');
+
+perguntas.forEach((q, i) => {
+  const div = document.createElement('div');
+  div.className = 'pergunta';
+  div.innerHTML = `
+    <h3>${i+1}. ${q.p}</h3>
+    <div class="opcoes">
+      ${q.ops.map((op, j) => `<div class="opcao" onclick="selecionar(${i}, ${j}, this)">${op}</div>`).join('')}
+    </div>
+  `;
+  container.appendChild(div);
+});
+
+function selecionar(perguntaIdx, opcaoIdx, el) {
+  el.parentElement.querySelectorAll('.opcao').forEach(o => o.classList.remove('selecionada'));
+  el.classList.add('selecionada');
+  respostas[perguntaIdx] = opcaoIdx;
+  const preenchidas = respostas.filter(r => r!== undefined).length;
+  btn.disabled = preenchidas!== perguntas.length;
+}
+
+async function analisar() {
+  const dados = JSON.parse(localStorage.getItem('dadosAluno') || '{}');
+  btn.disabled = true;
+  loading.style.display = 'block';
+
+  try {
+    const payload = {nome: dados.nome || 'Aluno', idade: dados.idade || 0, respostas};
+    const res = await fetch('/api/index3/processar', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload)
+    });
+
+    if (!res.ok) throw new Error('Erro na IA');
+
+    const data = await res.json();
+    localStorage.setItem('resultadoTeste', JSON.stringify(data.resultado));
+    localStorage.setItem('dadosTeste', JSON.stringify({nome: payload.nome, idade: payload.idade}));
+    window.location.href = 'index5.html';
+
+  } catch(e) {
+    alert('Erro: ' + e.message + '\nVerifica se o server.js tá rodando');
+    btn.disabled = false;
+    loading.style.display = 'none';
+  }
+}
+</script>
+</body>
+</html>

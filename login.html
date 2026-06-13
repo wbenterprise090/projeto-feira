@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<title>Login Administrativo | IA Maria</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root { --azul: #1e3a8a; --escuro: #0f172a; }
+body { font-family: 'Inter'; background: linear-gradient(135deg, var(--escuro) 0%, #1e293b 100%); display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
+.card { background: white; border-radius: 20px; padding: 40px 30px; width: 100%; max-width: 400px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+.logo { text-align: center; margin-bottom: 25px; }
+.logo i { font-size: 48px; color: var(--azul); }
+h1 { color: var(--azul); text-align: center; font-size: 24px; font-weight: 800; margin-bottom: 8px; }
+.sub { color: #64748b; text-align: center; font-size: 13px; margin-bottom: 30px; }
+input { width: 100%; padding: 15px 18px; border: 2px solid #e2e8f0; border-radius: 10px; margin-bottom: 15px; font-size: 15px; transition: 0.2s; }
+input:focus { outline: none; border-color: var(--azul); }
+.btn { width: 100%; padding: 16px; background: var(--azul); color: white; border: none; border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer; transition: 0.2s; }
+.btn:hover { opacity: 0.9; transform: translateY(-1px); }
+.erro { color: #dc2626; font-size: 13px; text-align: center; margin-top: 12px; display: none; background: #fef2f2; padding: 10px; border-radius: 8px; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="logo"><i class="fas fa-lock"></i></div>
+  <h1>Acesso Administrativo</h1>
+  <p class="sub">Painel de controle IA Maria</p>
+  <input type="password" id="senha" placeholder="Digite a senha de administrador">
+  <button class="btn" onclick="login()">Entrar no Painel</button>
+  <div class="erro" id="erro">Senha incorreta. Tenta novamente.</div>
+</div>
+<script>
+function login() {
+  if (senha.value === 'admin123') {
+    localStorage.setItem('adminLogado', 'true');
+    window.location.href = '/index7.html';
+  } else {
+    erro.style.display = 'block';
+    senha.value = '';
+  }
+}
+senha.addEventListener('keypress', e => { if(e.key === 'Enter') login(); });
+</script>
+</body>
+</html>

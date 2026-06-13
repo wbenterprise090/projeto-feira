@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cadastro | IA Maria</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+:root { --azul: #1e3a8a; --escuro: #0f172a; }
+body { font-family: 'Inter', sans-serif; background: var(--escuro); padding: 20px; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+.card { background: white; border-radius: 20px; padding: 30px 20px; max-width: 480px; width: 100%; }
+h1 { color: var(--azul); font-size: 22px; font-weight: 800; text-align: center; margin-bottom: 8px; }
+label { display: block; color: var(--azul); font-size: 13px; font-weight: 700; margin: 15px 0 6px; }
+input, select { width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 14px; }
+.btn { width: 100%; padding: 16px; background: var(--azul); color: white; border: none; border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer; margin-top: 25px; }
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>Cadastro Acadêmico</h1>
+  <form id="formCadastro">
+    <label>Nome completo</label>
+    <input type="text" id="nome" required>
+    <label>Idade</label>
+    <input type="number" id="idade" min="14" max="90" required>
+    <label>Curso desejado</label>
+    <select id="cursoDesejado" required>
+      <option value="">Selecione</option>
+      <option>Informática</option>
+      <option>Construção Civil</option>
+      <option>Saúde/Enfermagem</option>
+      <option>Administração</option>
+    </select>
+    <button type="submit" class="btn">Continuar →</button>
+  </form>
+</div>
+<script>
+document.getElementById('formCadastro').addEventListener('submit', e => {
+  e.preventDefault();
+  localStorage.setItem('dadosAluno', JSON.stringify({
+    nome: document.getElementById('nome').value,
+    idade: document.getElementById('idade').value,
+    cursoDesejado: document.getElementById('cursoDesejado').value
+  }));
+  window.location.href = 'index3.html';
+});
+</script>
+</body>
+</html>
